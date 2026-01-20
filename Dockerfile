@@ -18,6 +18,9 @@ RUN git clone https://github.com/comfy-org/ComfyUI /comfyui
 WORKDIR /comfyui
 SHELL ["/bin/bash", "-c"]
 
+# Secure standard models
+RUN mv /comfyui/models /comfyui/models_repo
+
 # Install PyTorch for ROCm 7.1.1
 RUN pip install https://repo.radeon.com/rocm/manylinux/rocm-rel-7.1.1/triton-3.5.1%2Brocm7.1.1.gita272dfa8-cp312-cp312-linux_x86_64.whl
 RUN pip install https://repo.radeon.com/rocm/manylinux/rocm-rel-7.1.1/torch-2.9.1%2Brocm7.1.1.lw.git351ff442-cp312-cp312-linux_x86_64.whl
