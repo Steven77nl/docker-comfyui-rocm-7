@@ -1,6 +1,6 @@
 FROM alpine/git:latest AS builder
 
-# Comes preinstalled with AMD ROCm
+# source docker image preinstalled with AMD ROCm 7.1.1
 FROM rocm/dev-ubuntu-24.04:7.1.1
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -8,7 +8,7 @@ ENV PIP_BREAK_SYSTEM_PACKAGES=1
 
 # Install base tooling
 RUN apt-get update
-RUN apt-get install -y git wget python3-pip python3-venv libstdc++-12-dev python3-setuptools python3-wheel rocm rocminfo
+RUN apt-get install -y git wget python3-pip python3-venv libstdc++-12-dev python3-setuptools python3-wheel rocm rocminfo libsndfile1 ffmpeg libgl1 libglib2.0-0
 RUN apt-get install -y --no-install-recommends google-perftools
 
 # clone latest ConfyUI
@@ -30,7 +30,10 @@ RUN pip install https://repo.radeon.com/rocm/manylinux/rocm-rel-7.1.1/torchaudio
 # Install Remaining Requirements for ComfyUI
 RUN pip install -r "requirements.txt"
 RUN pip install -r "manager_requirements.txt"
-RUN pip install pyyaml
+
+# Install Specific Node Dependencies
+COPY nodes_requirements.txt /nodes_requirements.txt
+RUN pip install -r "/nodes_requirements.txt"
 
 # Copy entrypoint script
 COPY entrypoint.sh /entrypoint.sh
