@@ -32,13 +32,17 @@ else
 
   fi
 
+  cd /comfyui/custom_nodes/
+  find . -type f -name 'requirements.txt' -exec pip install -r {} \;
+
   # Create firstrun file, so this block does not run again
   touch /firstrun
 
-  find /comfyui/ -type d -exec chmod 2777 {} \;
-  find /comfyui/ -type f -exec chmod 777 {} \;
 
 fi
+
+find /comfyui/ -type d -exec chmod 2777 {} \;
+find /comfyui/ -type f -exec chmod 777 {} \;
 
 # Run ComfyUI
 cd /comfyui
