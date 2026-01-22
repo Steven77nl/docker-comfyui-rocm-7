@@ -1,7 +1,7 @@
 FROM alpine/git:latest AS builder
 
 # source docker image preinstalled with AMD ROCm 7.1.1
-FROM rocm/dev-ubuntu-24.04:7.1.1
+FROM rocm/pytorch:rocm7.1.1_ubuntu24.04_py3.12_pytorch_release_2.9.1
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
@@ -43,11 +43,11 @@ RUN unzip master.zip && mv ComfyUI-master ComfyUI && rm master.zip
 RUN python3 -m venv /app/ComfyUI_venv
 ENV PATH="/app/ComfyUI_venv/bin:$PATH"
 
-# Install PyTorch for ROCm 7.1.1
-RUN pip install https://repo.radeon.com/rocm/manylinux/rocm-rel-7.1.1/triton-3.5.1%2Brocm7.1.1.gita272dfa8-cp312-cp312-linux_x86_64.whl
-RUN pip install https://repo.radeon.com/rocm/manylinux/rocm-rel-7.1.1/torch-2.9.1%2Brocm7.1.1.lw.git351ff442-cp312-cp312-linux_x86_64.whl
-RUN pip install https://repo.radeon.com/rocm/manylinux/rocm-rel-7.1.1/torchvision-0.24.0%2Brocm7.1.1.gitb919bd0c-cp312-cp312-linux_x86_64.whl
-RUN pip install https://repo.radeon.com/rocm/manylinux/rocm-rel-7.1.1/torchaudio-2.9.0%2Brocm7.1.1.gite3c6ee2b-cp312-cp312-linux_x86_64.whl
+# # Install PyTorch for ROCm 7.1.1
+# RUN pip install https://repo.radeon.com/rocm/manylinux/rocm-rel-7.1.1/triton-3.5.1%2Brocm7.1.1.gita272dfa8-cp312-cp312-linux_x86_64.whl
+# RUN pip install https://repo.radeon.com/rocm/manylinux/rocm-rel-7.1.1/torch-2.9.1%2Brocm7.1.1.lw.git351ff442-cp312-cp312-linux_x86_64.whl
+# RUN pip install https://repo.radeon.com/rocm/manylinux/rocm-rel-7.1.1/torchvision-0.24.0%2Brocm7.1.1.gitb919bd0c-cp312-cp312-linux_x86_64.whl
+# RUN pip install https://repo.radeon.com/rocm/manylinux/rocm-rel-7.1.1/torchaudio-2.9.0%2Brocm7.1.1.gite3c6ee2b-cp312-cp312-linux_x86_64.whl
 
 # Install core requirements for ComfyUI
 RUN pip install -r /app/ComfyUI/requirements.txt -r /app/ComfyUI/manager_requirements.txt
