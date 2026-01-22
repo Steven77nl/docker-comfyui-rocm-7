@@ -1,49 +1,47 @@
 #!/bin/bash
+set -e
 
-# Run this block only at first time a new image has been deployed
+export PATH="/app/ComfyUI_venv:$PATH"
+id
 
-if [ -e "/firstrun" ]; then
-
+if [ -e "/app/firstrun" ]; then
   echo "First run already executed"
 
 else
-
   echo "First run actions for new container"
 
-  # force fetch latest ComfyUI
-  cd /comfyui
-  git pull origin master
+  # restore repo files
+  cp -aT /app/ComfyUI/models_repo /app/ComfyUI/models
+  cp -aT /app/ComfyUI/custom_nodes_repo /app/ComfyUI/custom_nodes
+  cd /app/ComfyUI/custom_nodes/
 
-  # restore models
-  cp -aT /comfyui/models_repo /comfyui/models
-
-  # check for comfyui-manager repo
-  if [ -d "/comfyui/custom_nodes/comfyui-manager" ]; then
-
-    # update if already exist
-    cd /comfyui/custom_nodes/comfyui-manager
-    git pull
-
-  else
+  # check for ComfyUI-manager repo
+  if [ ! -d "/app/ComfyUI/custom_nodes/ComfyUI-Manager" ]; then
 
     # install if not exist
-    cd /comfyui/custom_nodes
-    git clone https://github.com/Comfy-Org/ComfyUI-Manager comfyui-manager
+    wget https://github.com/Comfy-Org/ComfyUI-Manager/archive/refs/heads/main.zip
+    unzip main.zip
+    mv ComfyUI-Manager-main ComfyUI-Manager
+    rm main.zip
 
   fi
 
-  cd /comfyui/custom_nodes/
-  find . -type f -name 'requirements.txt' -exec pip install -r {} \;
+  # install all requirements for the custom_nodes
+  find . -type f -name 'requirements.txt' -print0 |
+  while IFS= read -r -d '' f; do sed -e 's/\r$//' "$f"; printf '\n'; done |
+  awk 'NF && $0 !~ /^[[:space:]]*#/' |
+  sort -u > nodes_requirements.txt
 
+  pip install -r test_requirements.txt
+
+  # find . -type f -name 'requirements.txt' -exec pip install -r {} \;
   # Create firstrun file, so this block does not run again
-  touch /firstrun
-
+  touch /app/firstrun
 
 fi
 
-find /comfyui/ -type d -exec chmod 2777 {} \;
-find /comfyui/ -type f -exec chmod 777 {} \;
+rocminfo | grep -E "Name:|gfx|version|Version"
+pip freeze
 
 # Run ComfyUI
-cd /comfyui
-exec python3 main.py --lowvram --listen 0.0.0.0
+exec "$@"

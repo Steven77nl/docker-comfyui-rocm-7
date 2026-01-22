@@ -2,6 +2,7 @@ services:
   comfyui:
     image: comfyui-rocm-7.1.1
     container_name: comfyui-rocm-7
+    user: "${USER_UID}:${USER_GID}"
     ports:
       - 8188:8188
     devices:
@@ -11,11 +12,13 @@ services:
       - seccomp=unconfined
     group_add:
       - video
+      - render
     volumes:
-      - ~/.comfyui/user:/comfyui/user:rw
-      - ~/.comfyui/models:/comfyui/models:rw
-      - ~/.comfyui/output:/comfyui/output:rw
-      - ~/.comfyui/custom_nodes:/comfyui/custom_nodes:rw
+      - ~/.comfyui/user:/app/ComfyUI/user:rw
+      - ~/.comfyui/models:/app/ComfyUI/models:rw
+      - ~/.comfyui/output:/app/ComfyUI/output:rw
+      - ~/.comfyui/input:/app/ComfyUI/input:rw
+      - ~/.comfyui/custom_nodes:/app/ComfyUI/custom_nodes:rw
     stdin_open: true
     tty: true
     restart: always
