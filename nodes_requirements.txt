@@ -1,0 +1,16 @@
+accelerate>=1.2.1
+audioread
+diffusers>=0.32.0
+einops>=0.7.0
+ftfy>=6.1.1
+gguf>=0.13.0
+librosa>=0.10.1
+omegaconf>=2.3.0
+open-clip-torch>=2.29.0
+opencv-python
+protobuf
+pyyaml
+sentencepiece
+soundfile
+timm>=1.0.8
+torchdiffeq>=0.2.3
