@@ -1,13 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
-
-export PATH="/app/ComfyUI_venv:$PATH"
 id
 
+export PATH="/opt/venv/bin:$PATH"
+
 if [ -e "/app/firstrun" ]; then
+
   echo "First run already executed"
 
 else
+
   echo "First run actions for new container"
 
   # restore repo files
@@ -32,7 +34,11 @@ else
   awk 'NF && $0 !~ /^[[:space:]]*#/' |
   sort -u > nodes_requirements.txt
 
-  pip install -r test_requirements.txt
+  # cleaning file (set all to allow update, and old packages)
+  sed -i 's/==/>=/g' nodes_requirements.txt
+  sed -i '/tensorflow-addons/d' nodes_requirements.txt
+
+  pip install -r nodes_requirements.txt
 
   # find . -type f -name 'requirements.txt' -exec pip install -r {} \;
   # Create firstrun file, so this block does not run again
@@ -40,8 +46,10 @@ else
 
 fi
 
-rocminfo | grep -E "Name:|gfx|version|Version"
 pip freeze
+rocminfo | grep -E "Name:|gfx|version|Version"
+clinfo | grep -i version
 
 # Run ComfyUI
+cd /app/ComfyUI/
 exec "$@"
