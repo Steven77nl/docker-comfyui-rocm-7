@@ -1,7 +1,7 @@
 FROM alpine/git:latest AS builder
 
-# source docker image preinstalled with AMD ROCm 7.1.1
-FROM rocm/dev-ubuntu-24.04:7.1.1
+# source docker image preinstalled with AMD ROCm 7.2
+FROM rocm/dev-ubuntu-24.04:7.2-complete
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PIP_BREAK_SYSTEM_PACKAGES=1

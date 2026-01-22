@@ -1,12 +1,12 @@
 # Docker ComfyUI for AMD Radeon xf1201 ROCm 7.1.1
 
-ComfyUI Docker image project to run [ComfyUI](https://github.com/comfyanonymous/ComfyUI) with AMD ROCm 7.1.1
+ComfyUI Docker image project to run [ComfyUI](https://github.com/comfyanonymous/ComfyUI) with AMD ROCm 7.2
 Build for and tested with Radeon AI PRO R9700 (gfx1201)
 
 ## Features
 - All-in-one-Docker container
 - AMD RDNA4 GPU Support (gfx1201)
-- ROCm 7.1.1
+- ROCm 7.2
 - PyTorch 2.9.1
 - ComfyUI (latest)
 - ComfyUI-Manager (latest)

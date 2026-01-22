@@ -1,6 +1,6 @@
 services:
   comfyui:
-    image: comfyui-rocm-7.1.1
+    image: comfyui-rocm-7.2
     container_name: comfyui-rocm-7
     user: "${USER_UID}:${USER_GID}"
     ports:
