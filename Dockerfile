@@ -12,20 +12,20 @@ RUN apt-get install -y git rocm rocminfo libgl1 libglib2.0-0 libstdc++-12-dev li
 RUN apt-get install -y --no-install-recommends google-perftools
 
 # Fixing security on system python venv
-RUN chown -R "root:root" /opt/venv
-RUN chmod -R 2775 /opt/venv
+#RUN chown -R "root:root" /opt/venv
+RUN chmod -R 2777 /opt/venv
 
 # create cache folder
 RUN mkdir /.cache
-RUN chmod -R 2775 /.cache
+RUN chmod -R 2777 /.cache
 
 # create application folder and set as working dir
 RUN mkdir /app
-RUN chmod -R 2775 /app
 WORKDIR /app
 
 # download latest ComfyUI version
 RUN git clone https://github.com/Comfy-Org/ComfyUI
+RUN chmod -R 6777 /app
 
 # Backup  standard models (we copy these files back later at first run)
 RUN mv /app/ComfyUI/models /app/ComfyUI/models_repo
@@ -44,7 +44,7 @@ VOLUME ["/app/ComfyUI/custom_nodes"]
 
 # Copy entrypoint script
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN chmod 4775 /entrypoint.sh
 
 # cleanup
 RUN pip3 cache purge
