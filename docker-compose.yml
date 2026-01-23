@@ -2,7 +2,7 @@ services:
   comfyui:
     image: comfyui-rocm-7.2
     container_name: comfyui-rocm-7
-    #user: "${USER_UID}:${USER_GID}"
+    user: "${USER_UID}:${USER_GID}"
     ports:
       - 8188:8188
     devices:
@@ -11,6 +11,7 @@ services:
     security_opt:
       - seccomp=unconfined
     group_add:
+      - 0
       - ${RENDER_GID}
       - ${VIDEO_GID}
     volumes:

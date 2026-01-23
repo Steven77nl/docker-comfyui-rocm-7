@@ -10,7 +10,10 @@ if [ -e "/app/firstrun" ]; then
 
 else
 
-  echo "First run actions for new container"
+  echo "*****************************************************"
+  echo "      First run actions for a fresh container "
+  echo "   Run time depends on the amount of custom nodes"
+  echo "*****************************************************"
 
   # restore repo files
   cp -aT /app/ComfyUI/models_repo /app/ComfyUI/models
@@ -21,10 +24,7 @@ else
   if [ ! -d "/app/ComfyUI/custom_nodes/ComfyUI-Manager" ]; then
 
     # install if not exist
-    wget https://github.com/Comfy-Org/ComfyUI-Manager/archive/refs/heads/main.zip
-    unzip main.zip
-    mv ComfyUI-Manager-main ComfyUI-Manager
-    rm main.zip
+    git clone https://github.com/Comfy-Org/ComfyUI-Manager
 
   fi
 
@@ -34,14 +34,14 @@ else
   awk 'NF && $0 !~ /^[[:space:]]*#/' |
   sort -u > nodes_requirements.txt
 
-  # cleaning file (set all to allow update, and old packages)
+  # fixed for older custom nodes
   sed -i 's/==/>=/g' nodes_requirements.txt
   sed -i '/tensorflow-addons/d' nodes_requirements.txt
 
-  pip install -r nodes_requirements.txt
+  # install improved nodes_requirements.txt
+  pip install -r nodes_requirements.txt --no-cache-dir
 
-  # find . -type f -name 'requirements.txt' -exec pip install -r {} \;
-  # Create firstrun file, so this block does not run again
+  # mark container first run as finished
   touch /app/firstrun
 
 fi
