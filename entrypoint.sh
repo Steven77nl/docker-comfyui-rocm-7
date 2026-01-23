@@ -93,6 +93,7 @@ set -Eeuo pipefail
 KEYWORDS=(
   "Restarting"
   "Memory access fault by GPU"
+  "!!! Exception during processing !!!"
 )
 
 cd /app/ComfyUI/
